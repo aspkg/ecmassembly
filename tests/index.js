@@ -1,6 +1,13 @@
 const assert = require('assert')
 const myModule = require('..')
 
-assert.equal(myModule.add(1, 2), 3)
+myModule.testPromiseThen()
+
+myModule.testPromiseCatch()
+
+// process.on('uncaughtException', function (err) {
+//   console.error(err.stack);
+//   console.log("Node NOT Exiting...");
+// });
 
 console.log('ok')

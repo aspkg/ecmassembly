@@ -23,15 +23,6 @@ class ECMAssembly {
 
 	wasmImports = {
 		setTimeout: {
-			// TODO which of the two is faster? I'm guessing the second one (with fnPointerToIndex) is.
-			// Is new Uint32Array faster, or is calling into wasmExports.fnPointerToIndex faster?
-
-			// setTimeout(fnPtr, ms) {
-			// 	let index = new Uint32Array(wasmExports.memory.buffer, fnPtr, 1)[0]
-			// 	let fn = wasmExports.table.get(index)
-			// 	setTimeout(fn, ms)
-			// },
-
 			_setTimeout: (fnIndex, ms) => {
 				setTimeout(this.getFn(fnIndex), ms)
 			},
@@ -79,6 +70,15 @@ const imports = {
 	logf32: {
 		logf32(n) {
 			console.log(n)
+		},
+	},
+	env: {
+		abort(message, fileName, line, column) {
+			console.error('--------- Error message from AssemblyScript ---------')
+			console.error('  ' + wasmModule.exports.__getString(message))
+			console.error('    In file "' + wasmModule.exports.__getString(fileName) + '"')
+			console.error(`    on line ${line}, column ${column}.`)
+			console.error('-----------------------------------------------------')
 		},
 	},
 }
