@@ -1,4 +1,3 @@
-import {logf32} from './logf32'
 import {defer, deferWithArg, _defer} from './defer'
 import {ptr} from './utils'
 
@@ -18,8 +17,6 @@ export class PromiseActions<T> {
 		this.promise.__isSettled = true
 		this.promise.__isResolved = true
 
-		logf32(100)
-
 		this.promise.__result.push(result)
 
 		if (this.promise.__thenCallback.length) this.promise.__runThen()
@@ -29,8 +26,6 @@ export class PromiseActions<T> {
 		if (this.promise.__isSettled) return
 		this.promise.__isSettled = true
 		this.promise.__isRejected = true
-
-		logf32(101)
 
 		this.promise.__error.push(error)
 

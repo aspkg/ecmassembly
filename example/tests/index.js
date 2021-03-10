@@ -1,9 +1,8 @@
-const assert = require('assert')
-const myModule = require('..')
+import moduleExports from '../index.js'
 
-myModule.testPromiseThen()
+moduleExports.testPromiseThen()
 
-myModule.testPromiseCatch()
+moduleExports.testPromiseCatch()
 
 // process.on('uncaughtException', function (err) {
 //   console.error(err.stack);

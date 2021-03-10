@@ -6,13 +6,14 @@
 		"dev": "npm run asbuild:untouched && npm test && echo TODO: watch mode",
 		"asbuild:untouched": "asc assembly/index.ts --target debug --exportTable --exportRuntime",
 		"asbuild:optimized": "asc assembly/index.ts --target release --exportTable --exportRuntime",
-		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+		"test": "node tests"
 	},
 	"dependencies": {
+		"ecmassembly": "file:../",
 		"@assemblyscript/loader": "^0.18.11"
 	},
 	"devDependencies": {
-		"assemblyscript": "^0.18.11",
-		"prettier": "^2.2.1"
+		"assemblyscript": "^0.18.11"
 	}
 }

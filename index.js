@@ -1,10 +1,6 @@
 // @ts-check
 
-//// Library code ////////////////////////////////////
-
-const promises = new Map()
-
-class ECMAssembly {
+export class ECMAssembly {
 	table
 	__pin
 	__unpin
@@ -57,36 +53,3 @@ class ECMAssembly {
 		return this.table.get(fnIndex)
 	}
 }
-
-//// End user code ////////////////////////////////////
-
-const fs = require('fs')
-const loader = require('@assemblyscript/loader')
-
-const es = new ECMAssembly()
-
-const imports = {
-	...es.wasmImports,
-	logf32: {
-		logf32(n) {
-			console.log(n)
-		},
-	},
-	env: {
-		abort(message, fileName, line, column) {
-			console.error('--------- Error message from AssemblyScript ---------')
-			console.error('  ' + wasmModule.exports.__getString(message))
-			console.error('    In file "' + wasmModule.exports.__getString(fileName) + '"')
-			console.error(`    on line ${line}, column ${column}.`)
-			console.error('-----------------------------------------------------')
-		},
-	},
-}
-
-const wasmModule = loader.instantiateSync(
-	// fs.readFileSync(__dirname + "/build/optimized.wasm"),
-	fs.readFileSync(__dirname + '/build/untouched.wasm'),
-	imports,
-)
-
-module.exports = es.wasmExports = wasmModule.exports
