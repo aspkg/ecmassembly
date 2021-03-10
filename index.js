@@ -6,12 +6,14 @@ const promises = new Map()
 
 class ECMAssembly {
 	table
+	__pin
 
 	get wasmExports() {
 		return this._exports
 	}
 	set wasmExports(e) {
 		this.table = e.table
+		this.__pin = e.__pin
 		this._exports = e
 	}
 
@@ -38,7 +40,14 @@ class ECMAssembly {
 				Promise.resolve().then(this.getFn(callbackIndex))
 			},
 			_defer2: (callbackIndex, argPtr) => {
+				// Prevent the thing pointed to by argPtr from being collectd, because the callback needs it later.
+				this.__pin(argPtr)
+
 				Promise.resolve().then(() => {
+					// At this point, is the callback collected? Did we need to
+					// __pin the callback too, and it currently works by
+					// accident?
+
 					this.getFn(callbackIndex)(argPtr)
 				})
 			},
