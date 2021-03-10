@@ -54,6 +54,7 @@ export class Promise<T> {
 	__thenCallback: Array<(val: T) => void> = []
 
 	then(cb: (v: T) => void): void {
+		// If there's already a callback
 		if (this.__thenCallback.length) throw new Error('then/catch chaining not supported yet.')
 
 		this.__thenCallback.push(cb)
@@ -61,21 +62,27 @@ export class Promise<T> {
 		if (this.__result.length) {
 			// The goal here is to run the callback in the next microtask, as per Promise spec.
 
-			// FIXME: unable to pass method pointers:
+			// XXX unable to pass method pointers:
 			// defer<(this: Promise<T>) => void>(this.__runThen)
 			// _defer(ptr(this.__runThen))
 			// _defer(ptr<(this: Promise<T>) => void>(this.__runThen))
 
 			defer2((selfPtr: usize) => {
 				const self = load<Promise<T>>(selfPtr)
-				self.__runThen()
+				self.__runThen() // RUNTIME ERROR
+				// self.test()
 			}, ptr(this))
 
 			// this.__runThen()
 		}
 	}
 
+	test(): void {
+		logf32(9999.0)
+	}
+
 	__runThen(): void {
+		if (!this.__thenCallback.length || !this.__result.length) throw new Error('This should not happen.')
 		const fn = this.__thenCallback[0]
 		fn(this.__result[0])
 	}
@@ -83,6 +90,7 @@ export class Promise<T> {
 	__catchCallback: Array<(err: Err) => void> = []
 
 	catch(cb: (err: Err) => void): void {
+		// If there's already a callback
 		if (this.__catchCallback.length) throw new Error('then/catch chaining not supported yet.')
 
 		this.__catchCallback.push(cb)
@@ -94,6 +102,7 @@ export class Promise<T> {
 	}
 
 	__runCatch(): void {
+		if (!this.__catchCallback.length || !this.__error.length) throw new Error('This should not happen.')
 		const fn = this.__catchCallback[0]
 		fn(this.__error[0])
 	}

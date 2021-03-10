@@ -70,14 +70,10 @@ const imports = {
 	},
 }
 
-console.log('Load module')
-
 const wasmModule = loader.instantiateSync(
 	// fs.readFileSync(__dirname + "/build/optimized.wasm"),
 	fs.readFileSync(__dirname + '/build/untouched.wasm'),
 	imports,
 )
-
-console.log('set wasmExports')
 
 module.exports = es.wasmExports = wasmModule.exports
