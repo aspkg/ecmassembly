@@ -68,17 +68,10 @@ export class Promise<T> {
 			// _defer(ptr<(this: Promise<T>) => void>(this.__runThen))
 
 			defer2((selfPtr: usize) => {
-				const self = load<Promise<T>>(selfPtr)
+				const self = changetype<Promise<T>>(selfPtr)
 				self.__runThen() // RUNTIME ERROR
-				// self.test()
 			}, ptr(this))
-
-			// this.__runThen()
 		}
-	}
-
-	test(): void {
-		logf32(9999.0)
 	}
 
 	__runThen(): void {
