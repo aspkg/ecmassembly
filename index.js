@@ -33,28 +33,6 @@ class ECMAssembly {
 			},
 		},
 
-		Promise: {
-			newPromise: (promisePtr, executorPtr) => {
-				console.log('new Promise', promisePtr, executorPtr)
-
-				let resolve, reject
-
-				const promise = new Promise((res, rej) => {
-					resolve = res
-					reject = rej
-				})
-
-				promises.set(promisePtr, promise)
-
-				// const executor = this.getFn(executorPtr)
-				// executor(resolve, reject)
-			},
-
-			promiseThen: (promisePtr, callbackPtr) => {
-				console.log('promise.then', promisePtr, callbackPtr)
-				// const promise = promises.get(promisePtr)
-			},
-		},
 		defer: {
 			_defer: callbackIndex => {
 				Promise.resolve().then(this.getFn(callbackIndex))

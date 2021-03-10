@@ -1,6 +1,3 @@
-declare function newPromise(promisePtr: usize, executorPtr: usize): void
-declare function promiseThen(promisePtr: usize, callbackPtr: usize): void
-
 import {logf32} from './logf32'
 import {defer, defer2, _defer} from './defer'
 import {ptr} from './utils'
@@ -51,7 +48,6 @@ export class Promise<T> {
 	__error: Array<Err> = []
 
 	constructor(private executor: Executor<T>) {
-		newPromise(ptr(this), ptr(this.executor))
 		this.executor(this.actions)
 	}
 
@@ -77,8 +73,6 @@ export class Promise<T> {
 
 			// this.__runThen()
 		}
-
-		promiseThen(ptr(this), ptr(cb))
 	}
 
 	__runThen(): void {
@@ -94,10 +88,9 @@ export class Promise<T> {
 		this.__catchCallback.push(cb)
 
 		if (this.__error.length) {
+			// TODO defer
 			this.__runCatch()
 		}
-
-		promiseThen(ptr(this), ptr(cb))
 	}
 
 	__runCatch(): void {
