@@ -7,6 +7,7 @@ const promises = new Map()
 class ECMAssembly {
 	table
 	__pin
+	__unpin
 
 	get wasmExports() {
 		return this._exports
@@ -14,6 +15,7 @@ class ECMAssembly {
 	set wasmExports(e) {
 		this.table = e.table
 		this.__pin = e.__pin
+		this.__unpin = e.__unpin
 		this._exports = e
 	}
 
@@ -49,6 +51,8 @@ class ECMAssembly {
 					// accident?
 
 					this.getFn(callbackIndex)(argPtr)
+
+					this.__unpin(argPtr)
 				})
 			},
 		},
