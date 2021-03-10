@@ -1,5 +1,5 @@
 import {logf32} from './logf32'
-import {defer, defer2, _defer} from './defer'
+import {defer, deferWithArg, _defer} from './defer'
 import {ptr} from './utils'
 
 // TODO convert to callback form once closures are out.
@@ -67,9 +67,9 @@ export class Promise<T> {
 			// _defer(ptr(this.__runThen))
 			// _defer(ptr<(this: Promise<T>) => void>(this.__runThen))
 
-			defer2((selfPtr: usize) => {
+			deferWithArg((selfPtr: usize) => {
 				const self = changetype<Promise<T>>(selfPtr)
-				self.__runThen() // RUNTIME ERROR
+				self.__runThen()
 			}, ptr(this))
 		}
 	}

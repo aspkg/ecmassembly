@@ -13,9 +13,11 @@ export function defer<T>(fn: T): void {
 
 /////////////////////////////////////////
 
-declare function _defer2(fn: usize, arg: usize): void
+declare function _deferWithArg(fn: usize, arg: usize): void
 
-export function defer2<T>(fn: T, arg: usize): void {
+export {_deferWithArg}
+
+export function deferWithArg<T>(fn: T, arg: usize): void {
 	if (!isFunction<T>(fn)) throw new Error('Must pass a function of type `() => void`.')
-	_defer2(fnPointerToIndex(ptr(fn)), arg)
+	_deferWithArg(fnPointerToIndex(ptr(fn)), arg)
 }

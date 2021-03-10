@@ -41,7 +41,7 @@ class ECMAssembly {
 			_defer: callbackIndex => {
 				Promise.resolve().then(this.getFn(callbackIndex))
 			},
-			_defer2: (callbackIndex, argPtr) => {
+			_deferWithArg: (callbackIndex, argPtr) => {
 				// Prevent the thing pointed to by argPtr from being collectd, because the callback needs it later.
 				this.__pin(argPtr)
 
