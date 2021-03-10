@@ -1,5 +1,3 @@
-export * from './glue'
-
 import {Promise} from './Promise'
 import {setTimeout} from './setTimeout'
 import {logf32} from './logf32'

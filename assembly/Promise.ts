@@ -2,11 +2,8 @@ declare function newPromise(promisePtr: usize, executorPtr: usize): void
 declare function promiseThen(promisePtr: usize, callbackPtr: usize): void
 
 import {logf32} from './logf32'
-import {defer, _defer} from './defer'
-
-function ptr<T>(any: T): usize {
-	return changetype<usize>(any)
-}
+import {defer, defer2, _defer} from './defer'
+import {ptr} from './utils'
 
 // TODO convert to callback form once closures are out.
 // type Executor<T> = (resolve: (result: T) => void, reject: (error: Error | null) => void) => void
@@ -66,11 +63,19 @@ export class Promise<T> {
 		this.__thenCallback.push(cb)
 
 		if (this.__result.length) {
+			// The goal here is to run the callback in the next microtask, as per Promise spec.
+
 			// FIXME: unable to pass method pointers:
 			// defer<(this: Promise<T>) => void>(this.__runThen)
 			// _defer(ptr(this.__runThen))
+			// _defer(ptr<(this: Promise<T>) => void>(this.__runThen))
 
-			this.__runThen()
+			defer2((selfPtr: usize) => {
+				const self = load<Promise<T>>(selfPtr)
+				self.__runThen()
+			}, ptr(this))
+
+			// this.__runThen()
 		}
 
 		promiseThen(ptr(this), ptr(cb))

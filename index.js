@@ -5,7 +5,17 @@
 const promises = new Map()
 
 class ECMAssembly {
-	wasmExports = null
+	table
+
+	get wasmExports() {
+		return this._exports
+	}
+	set wasmExports(e) {
+		this.table = e.table
+		this._exports = e
+	}
+
+	_exports = null
 
 	wasmImports = {
 		setTimeout: {
@@ -18,8 +28,8 @@ class ECMAssembly {
 			// 	setTimeout(fn, ms)
 			// },
 
-			setTimeout: (fnPtr, ms) => {
-				setTimeout(this.getFn(fnPtr), ms)
+			_setTimeout: (fnIndex, ms) => {
+				setTimeout(this.getFn(fnIndex), ms)
 			},
 		},
 
@@ -46,15 +56,23 @@ class ECMAssembly {
 			},
 		},
 		defer: {
-			_defer: callbackPtr => {
-				Promise.resolve().then(this.getFn(callbackPtr))
+			_defer: callbackIndex => {
+				Promise.resolve().then(this.getFn(callbackIndex))
+			},
+			_defer2: (callbackIndex, argPtr) => {
+				Promise.resolve().then(() => {
+					this.getFn(callbackIndex)(argPtr)
+				})
 			},
 		},
 	}
 
-	getFn(fnPtr) {
-		if (!this.wasmExports) throw new Error('Make sure you set wasmExports after instantiating the Wasm module.')
-		return this.wasmExports.table.get(this.wasmExports.fnPointerToIndex(fnPtr))
+	getFn(fnIndex) {
+		if (!this.wasmExports)
+			throw new Error(
+				'Make sure you set .wasmExports after instantiating the Wasm module but before running the Wasm module.',
+			)
+		return this.table.get(fnIndex)
 	}
 }
 
