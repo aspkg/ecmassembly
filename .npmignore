@@ -1,0 +1,17 @@
+# Specificty of the following rules matters.
+
+# Ignore everything,
+/**/*
+
+# but include these folders
+!/assembly/**/*
+
+# except for these files in the above folders.
+/src/**/*.spec.*
+/src/tests/**/*
+
+# The following won't work as you think it would.
+# /**/*
+# !/build/**/*
+# !/src/**/*
+# /**/*.spec.*
