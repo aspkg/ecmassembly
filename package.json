@@ -16,5 +16,14 @@
 	"devDependencies": {
 		"assemblyscript": "^0.18.11",
 		"prettier": "^2.2.1"
-	}
+	},
+	"keywords": [
+		"assemblyscript",
+		"webassembly",
+		"wasm",
+		"promise",
+		"requestanimationframe",
+		"raf",
+		"settimeout"
+	]
 }
