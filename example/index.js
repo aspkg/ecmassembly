@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import loader from '@assemblyscript/loader'
+import ASLoader from '@assemblyscript/loader'
 import {ECMAssembly} from 'ecmassembly/index.js'
 import raf from 'raf'
 
@@ -33,7 +33,10 @@ function dirname(url) {
 	return parts.join(path.sep).replace('file://', '')
 }
 
-const wasmModule = loader.instantiateSync(fs.readFileSync(dirname(import.meta.url) + '/build/untouched.wasm'), imports)
+const wasmModule = ASLoader.instantiateSync(
+	fs.readFileSync(dirname(import.meta.url) + '/build/untouched.wasm'),
+	imports,
+)
 
 es.wasmExports = wasmModule.exports
 
