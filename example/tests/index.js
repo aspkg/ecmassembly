@@ -2,7 +2,10 @@ import moduleExports from '../index.js'
 
 moduleExports.testPromiseThen()
 moduleExports.testPromiseCatch()
-moduleExports.testRAF()
+
+setTimeout(() => {
+	moduleExports.testRAF()
+}, 2500)
 
 // process.on('uncaughtException', function (err) {
 //   console.error(err.stack);

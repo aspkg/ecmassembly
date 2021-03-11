@@ -66,7 +66,8 @@ export function testPromiseCatch(): void {
 }
 
 let actions3: PromiseActions<f32> | null = null
-let count: i32 = 0
+let count: f32 = 0.0
+let loop: (time: f32) => void = (t: f32) => {}
 
 export function testRAF(): void {
 	logf32(9.0)
@@ -85,6 +86,14 @@ export function testRAF(): void {
 		logf32(4000)
 		logf32(n)
 	})
+
+	loop = (time: f32): void => {
+		logf32(count)
+		logf32(time)
+		if (count++ < 100.0) requestAnimationFrame(loop)
+	}
+
+	requestAnimationFrame(loop)
 
 	logf32(11.0)
 }
