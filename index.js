@@ -23,8 +23,8 @@ export class ECMAssembly {
 				if (typeof requestAnimationFrame === 'undefined')
 					throw new Error('No requestAnimationFrame function detected. Install a polyfill in your environment first.')
 
-				requestAnimationFrame(t => {
-					this.getFn(fnIndex)(t)
+				requestAnimationFrame(time => {
+					this.getFn(fnIndex)(time)
 				})
 			},
 		},

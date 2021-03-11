@@ -6,7 +6,6 @@ import {logf32} from './logf32'
 // closures. Once closures land, this class will not be exported, and the end
 // user will use callbacks passed into new Promise executors.
 let actions: PromiseActions<i32> | null = null
-let actions2: PromiseActions<i32> | null = null
 
 export function testPromiseThen(): void {
 	setTimeout(() => {
@@ -38,6 +37,8 @@ export function testPromiseThen(): void {
 	logf32(4.0)
 }
 
+let actions2: PromiseActions<i32> | null = null
+
 export function testPromiseCatch(): void {
 	logf32(5.0)
 
@@ -49,12 +50,6 @@ export function testPromiseCatch(): void {
 		setTimeout(() => {
 			logf32(7.0)
 
-			// We will not need any null assertion when closures allows us to
-			// remove PromiseActions and therefore the user relies on the
-			// resolve/reject functions that will be passed into here, but for
-			// now they rely on actions object being passed in, and there's no
-			// way to reference it inside the setTimeout callback except for
-			// storing it on a global variable due to lacking closures.
 			actions2!.reject('There was a problem!')
 		}, 2000)
 	})
@@ -70,27 +65,25 @@ export function testPromiseCatch(): void {
 	logf32(8.0)
 }
 
+let actions3: PromiseActions<f32> | null = null
+let count: i32 = 0
+
 export function testRAF(): void {
 	logf32(9.0)
 
-	const p = new Promise<i32>(_actions => {
-		actions = _actions
+	const p = new Promise<f32>(_actions => {
+		actions3 = _actions
 
 		logf32(10.0)
 
-		requestAnimationFrame((t: f32) => {
-			// We will not need any null assertion when closures allows us to
-			// remove PromiseActions and therefore the user relies on the
-			// resolve/reject functions that will be passed into here, but for
-			// now they rely on actions object being passed in, and there's no
-			// way to reference it inside the setTimeout callback except for
-			// storing it on a global variable due to lacking closures.
-			actions!.resolve(123)
+		requestAnimationFrame((time: f32) => {
+			actions3!.resolve(time)
 		})
 	})
 
-	p.then((n: i32) => {
+	p.then((n: f32) => {
 		logf32(4000)
+		logf32(n)
 	})
 
 	logf32(11.0)
