@@ -8,6 +8,9 @@ So far:
 - `setTimeout`
 - `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
 
+> The name is a play on words:
+> `ECMAScript -> AssemblyScript -> ECMAssembly`
+
 # Usage
 
 Look at [`example/index.js`](./example/index.js) to see how one would
