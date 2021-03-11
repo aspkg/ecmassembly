@@ -18,6 +18,17 @@ export class ECMAssembly {
 	_exports = null
 
 	wasmImports = {
+		requestAnimationFrame: {
+			_requestAnimationFrame: fnIndex => {
+				if (typeof requestAnimationFrame === 'undefined')
+					throw new Error('No requestAnimationFrame function detected. Install a polyfill in your environment first.')
+
+				requestAnimationFrame(t => {
+					this.getFn(fnIndex)(t)
+				})
+			},
+		},
+
 		setTimeout: {
 			_setTimeout: (fnIndex, ms) => {
 				setTimeout(this.getFn(fnIndex), ms)

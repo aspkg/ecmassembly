@@ -10,8 +10,9 @@
 		"test": "node tests"
 	},
 	"dependencies": {
+		"@assemblyscript/loader": "^0.18.11",
 		"ecmassembly": "file:../",
-		"@assemblyscript/loader": "^0.18.11"
+		"raf": "^3.4.1"
 	},
 	"devDependencies": {
 		"assemblyscript": "^0.18.11"
