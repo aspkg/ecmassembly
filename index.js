@@ -17,6 +17,8 @@ export class ECMAssembly {
 
 	_exports = null
 
+	__deferWithArg_pinnedRefCount = new Map()
+
 	wasmImports = {
 		requestAnimationFrame: {
 			_requestAnimationFrame: fnIndex => {
@@ -40,17 +42,29 @@ export class ECMAssembly {
 				Promise.resolve().then(this.getFn(callbackIndex))
 			},
 			_deferWithArg: (callbackIndex, argPtr) => {
+				let refCount = this.__deferWithArg_pinnedRefCount.get(argPtr)
+				refCount ?? this.__deferWithArg_pinnedRefCount.set(argPtr, (refCount = 0))
+
 				// Prevent the thing pointed to by argPtr from being collectd, because the callback needs it later.
-				this.__pin(argPtr)
+				if (refCount++ === 0) this.__pin(argPtr)
+				this.__deferWithArg_pinnedRefCount.set(argPtr, refCount)
 
 				Promise.resolve().then(() => {
 					// At this point, is the callback collected? Did we need to
-					// __pin the callback too, and it currently works by
+					// __pin the callback too? Does it currently works by
 					// accident?
 
 					this.getFn(callbackIndex)(argPtr)
 
-					this.__unpin(argPtr)
+					let refCount = this.__deferWithArg_pinnedRefCount.get(argPtr)
+					if (refCount == null) throw new Error('We should always have a ref count at this point!')
+
+					if (refCount-- === 0) {
+						this.__unpin(argPtr)
+						this.__deferWithArg_pinnedRefCount.delete(argPtr)
+					} else {
+						this.__deferWithArg_pinnedRefCount.set(argPtr, refCount)
+					}
 				})
 			},
 		},
