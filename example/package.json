@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"scripts": {
-		"start": "npm run dev",
+		"start": "npm i && npm run dev",
 		"build": "npm run asbuild",
 		"dev": "npm run asbuild:untouched && npm test && echo TODO: watch mode",
 		"asbuild:untouched": "asc assembly/index.ts --target debug --exportTable --exportRuntime",

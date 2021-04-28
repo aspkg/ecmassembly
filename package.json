@@ -8,7 +8,8 @@
 		"dev": "npm run asbuild:untouched && npm test && echo TODO: watch mode",
 		"asbuild:untouched": "asc assembly/index.ts --target debug --exportTable --exportRuntime",
 		"asbuild:optimized": "asc assembly/index.ts --target release --exportTable --exportRuntime",
-		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+		"test": "cd example && npm start"
 	},
 	"dependencies": {
 		"@assemblyscript/loader": "^0.18.11"
