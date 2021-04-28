@@ -7,6 +7,7 @@ So far:
 - `requestAnimationFrame`
 - `setTimeout`
 - `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
+- `Console`
 
 > The name is a play on words:
 > `ECMAScript -> AssemblyScript -> ECMAssembly`
@@ -49,23 +50,18 @@ ASLoader.instantiateStreaming(fetch('path/to/module.wasm'), imports).then(wasmMo
 In your AssemblyScript code import what you need an use it:
 
 ```ts
-import {Promise, setTimeout, PromiseActions} from '../node_modules/ecmassembly/assembly/index'
+import {Promise, setTimeout, console } from '../node_modules/ecmassembly/assembly/index'
 
 export function runMyApp() {
-	const actions: PromiseActions | null = null
 
-	const promise = new Promise<boolean>(_actions => {
-		// Temporary hack while AS does not yet support closures (no closing over variable except those that are at the top-level of the module).
-		actions = _actions
+	const promise = new Promise<string>(promise => {
+		
+		promise.resolve('Hello, World!')
 
-		// resolve after 1 second
-		setTimeout(() => {
-			actions.resolve(true)
-		}, 1000)
-	})
-
-	promise.then(result => {
-		// `result` will be `true` here, this runs one second later.
+	}).then(result => {
+		
+		console.log(result)
+		// -- Console accepts amost anything. Numbers, Strings, Functions, Arrays.
 	})
 }
 ```

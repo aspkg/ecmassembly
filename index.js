@@ -18,6 +18,11 @@ export class ECMAssembly {
 	_exports = null
 
 	wasmImports = {
+		console: {
+			_log: (data) => {
+				console.log(this._exports.__getString(data))
+			}
+		},
 		requestAnimationFrame: {
 			_requestAnimationFrame: fnIndex => {
 				if (typeof requestAnimationFrame === 'undefined')
