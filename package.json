@@ -2,6 +2,7 @@
 	"name": "ecmassembly",
 	"version": "0.1.1",
 	"type": "module",
+	"home": "",
 	"scripts": {
 		"start": "npm run dev",
 		"build": "npm run asbuild",
@@ -9,7 +10,10 @@
 		"asbuild:untouched": "asc assembly/index.ts --target debug --exportTable --exportRuntime",
 		"asbuild:optimized": "asc assembly/index.ts --target release --exportTable --exportRuntime",
 		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
-		"test": "cd example && npm start"
+		"test": "cd example && npm start",
+		"release:patch": "npm version patch -m 'v%s' && npm publish && git push --follow-tags",
+		"release:minor": "npm version minor -m 'v%s' && npm publish && git push --follow-tags",
+		"release:major": "npm version major -m 'v%s' && npm publish && git push --follow-tags"
 	},
 	"dependencies": {
 		"@assemblyscript/loader": "^0.18.11"

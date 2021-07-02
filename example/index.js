@@ -38,6 +38,8 @@ const wasmModule = ASLoader.instantiateSync(
 	imports,
 )
 
+// Before doing anything, give the exports to ECMAssembly
 es.wasmExports = wasmModule.exports
 
+// Now run anything (in this case, the example's tests/index.js file will call the exported functions).
 export default wasmModule.exports
