@@ -4,8 +4,8 @@
 
 So far:
 
-- `requestAnimationFrame`
-- `setTimeout`
+- `requestAnimationFrame`/`cancelAnimationFrame`
+- `setTimeout`/`clearTimeout`
 - `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
 
 > The name is a play on words:

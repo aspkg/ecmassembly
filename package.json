@@ -2,7 +2,14 @@
 	"name": "ecmassembly",
 	"version": "0.1.5",
 	"type": "module",
-	"home": "",
+	"homepage": "https://github.com/aspkg/ecmassembly",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:aspkg/ecmassembly.git"
+	},
+	"bugs": {
+		"url": "https://github.com/aspkg/ecmassembly/issues"
+	},
 	"scripts": {
 		"start": "npm run dev",
 		"build": "npm run asbuild",
