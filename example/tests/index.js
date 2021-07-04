@@ -1,5 +1,6 @@
 import moduleExports from '../index.js'
 
+moduleExports.testSetTimeout()
 moduleExports.testPromiseThen()
 moduleExports.testPromiseCatch()
 moduleExports.testPromiseThenFinally()

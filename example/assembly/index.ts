@@ -1,5 +1,11 @@
-import {Promise, PromiseActions, setTimeout, requestAnimationFrame} from '../node_modules/ecmassembly/assembly/index'
-import {logf32} from './logf32'
+import {
+	Promise,
+	PromiseActions,
+	setTimeout,
+	requestAnimationFrame,
+	clearTimeout,
+} from '../node_modules/ecmassembly/assembly/index'
+import {logf32, logstr} from './log'
 
 // User should not new PromiseActions directly, but we have to export it so
 // they can create a variable that will reference it because there are no
@@ -7,11 +13,24 @@ import {logf32} from './logf32'
 // user will use callbacks passed into new Promise executors.
 let actions: PromiseActions<i32, Error> | null = null
 
-export function testPromiseThen(): void {
+let timeout: i32 = 0
+
+export function testSetTimeout(): void {
 	setTimeout(() => {
-		logf32(1.0)
+		logstr('Timeout!')
 	}, 1000)
 
+	// We should not see the log from the cancelled timeout.
+	timeout = setTimeout(() => {
+		logstr('We should not see this!!!!!!!!!')
+	}, 1000)
+
+	setTimeout(() => {
+		clearTimeout(timeout)
+	}, 10)
+}
+
+export function testPromiseThen(): void {
 	logf32(2.0)
 
 	const p = new Promise<i32, Error>(_actions => {

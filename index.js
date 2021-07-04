@@ -35,8 +35,9 @@ export class ECMAssembly {
 
 		setTimeout: {
 			_setTimeout: (fnIndex, ms) => {
-				setTimeout(this.getFn(fnIndex), ms)
+				return setTimeout(this.getFn(fnIndex), ms)
 			},
+			clearTimeout,
 		},
 
 		defer: {
