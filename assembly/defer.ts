@@ -1,14 +1,11 @@
-import {fnPointerToIndex, ptr} from './utils'
-
 /////////////////////////////////////////
 
 declare function _defer(fn: usize): void
 
 export {_defer}
 
-export function defer<T>(fn: T): void {
-	if (!isFunction<T>(fn)) throw new Error('Must pass a function of type `() => void`.')
-	_defer(fnPointerToIndex(ptr(fn)))
+export function defer(fn: () => void): void {
+	_defer(fn.index)
 }
 
 /////////////////////////////////////////
@@ -18,6 +15,9 @@ declare function _deferWithArg(fn: usize, arg: usize): void
 export {_deferWithArg}
 
 export function deferWithArg<T>(fn: T, arg: usize): void {
-	if (!isFunction<T>(fn)) throw new Error('Must pass a function of type `() => void`.')
-	_deferWithArg(fnPointerToIndex(ptr(fn)), arg)
+	if (!isFunction<T>(fn)) {
+		ERROR('Must pass a function with on parameter.')
+		throw new Error('Must pass a function with on parameter.')
+	}
+	_deferWithArg(fn.index, arg)
 }

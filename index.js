@@ -40,6 +40,13 @@ export class ECMAssembly {
 			clearTimeout,
 		},
 
+		setInterval: {
+			_setInterval: (fnIndex, ms) => {
+				return setInterval(this.getFn(fnIndex), ms)
+			},
+			clearInterval,
+		},
+
 		defer: {
 			_defer: callbackIndex => {
 				Promise.resolve().then(this.getFn(callbackIndex))

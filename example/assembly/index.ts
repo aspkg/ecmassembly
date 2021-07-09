@@ -4,6 +4,8 @@ import {
 	setTimeout,
 	requestAnimationFrame,
 	clearTimeout,
+	setInterval,
+	clearInterval,
 } from '../node_modules/ecmassembly/assembly/index'
 import {logf32, logstr} from './log'
 
@@ -14,6 +16,7 @@ import {logf32, logstr} from './log'
 let actions: PromiseActions<i32, Error> | null = null
 
 let timeout: i32 = 0
+let interval: i32 = 0
 
 export function testSetTimeout(): void {
 	setTimeout(() => {
@@ -28,6 +31,16 @@ export function testSetTimeout(): void {
 	setTimeout(() => {
 		clearTimeout(timeout)
 	}, 10)
+}
+
+export function testSetInterval(): void {
+	interval = setInterval(() => {
+		logstr('Interval!')
+	}, 750)
+
+	setTimeout(() => {
+		clearInterval(interval)
+	}, 2500)
 }
 
 export function testPromiseThen(): void {

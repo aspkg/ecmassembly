@@ -46,6 +46,7 @@ export class PromiseActions<T, E extends Error> {
  * object, as per the Promise spec.
  */
 export class Promise<T, E extends Error> {
+	private __ptr: usize = ptr(this)
 	private __isSettled: boolean = false
 
 	private __actions: PromiseActions<T, E> = new PromiseActions(this)
@@ -93,7 +94,7 @@ export class Promise<T, E extends Error> {
 				const self = changetype<Promise<T, E>>(selfPtr)
 				const fn = self.__thenCallback[0]
 				fn(self.__result[0])
-			}, ptr(this))
+			}, this.__ptr)
 		}
 
 		// Run the finally callbacks
@@ -102,7 +103,7 @@ export class Promise<T, E extends Error> {
 				const self = changetype<Promise<T, E>>(selfPtr)
 				const fn = self.__finallyCallback[0]
 				fn()
-			}, ptr(this))
+			}, this.__ptr)
 		}
 	}
 
@@ -128,7 +129,7 @@ export class Promise<T, E extends Error> {
 				const self = changetype<Promise<T, E>>(selfPtr)
 				const fn = self.__catchCallback[0]
 				fn(self.__error[0])
-			}, ptr(this))
+			}, this.__ptr)
 		}
 
 		// Run the finally callbacks
@@ -137,7 +138,7 @@ export class Promise<T, E extends Error> {
 				const self = changetype<Promise<T, E>>(selfPtr)
 				const fn = self.__finallyCallback[0]
 				fn()
-			}, ptr(this))
+			}, this.__ptr)
 		}
 	}
 
