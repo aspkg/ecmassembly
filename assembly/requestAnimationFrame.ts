@@ -2,7 +2,11 @@ declare function _requestAnimationFrame(fn: usize): i32
 
 export {_requestAnimationFrame}
 
-export function requestAnimationFrame(fn: (time: f32) => void): i32 {
+export function requestAnimationFrame<T>(fn: T): i32 {
+	if (!isFunction<T>(fn)) {
+		ERROR('Must pass a function.')
+		throw new Error('Must pass a function.')
+	}
 	return _requestAnimationFrame(fn.index)
 }
 
