@@ -1,13 +1,6 @@
 # ECMAssembly
 
-(Some) JavaScript APIs brought to AssemblyScript.
-
-So far:
-
-- `requestAnimationFrame`/`cancelAnimationFrame`
-- `setTimeout`/`clearTimeout`
-- `setInterval`/`clearInterval`
-- `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
+Spec'd and/or common JavaScript APIs brought to AssemblyScript.
 
 > The name is a play on words:
 > `ECMAScript -> AssemblyScript -> ECMAssembly`
@@ -91,3 +84,10 @@ export function runMyApp() {
 	requestAnimationFrame(loop)
 }
 ```
+
+# APIs so far
+
+- `requestAnimationFrame`/`cancelAnimationFrame`
+- `setTimeout`/`clearTimeout`
+- `setInterval`/`clearInterval`
+- `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
