@@ -6,6 +6,7 @@ So far:
 
 - `requestAnimationFrame`/`cancelAnimationFrame`
 - `setTimeout`/`clearTimeout`
+- `setInterval`/`clearInterval`
 - `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
 
 > The name is a play on words:
