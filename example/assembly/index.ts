@@ -20,8 +20,12 @@ let interval: i32 = 0
 
 export function testSetTimeout(): void {
 	setTimeout(() => {
-		logstr('Timeout!')
+		logstr('Timeout one!')
 	}, 1000)
+
+	setTimeout(() => {
+		logstr('Timeout two!')
+	})
 
 	// We should not see the log from the cancelled timeout.
 	timeout = setTimeout(() => {
@@ -35,12 +39,20 @@ export function testSetTimeout(): void {
 
 export function testSetInterval(): void {
 	interval = setInterval(() => {
-		logstr('Interval!')
+		logstr('Interval one!')
 	}, 750)
 
 	setTimeout(() => {
 		clearInterval(interval)
+
+		interval = setInterval(() => {
+			logstr('Interval two!')
+		})
 	}, 2500)
+
+	setTimeout(() => {
+		clearInterval(interval)
+	}, 3500)
 }
 
 export function testPromiseThen(): void {

@@ -7,8 +7,6 @@ moduleExports.testPromiseCatch()
 moduleExports.testPromiseThenFinally()
 moduleExports.testPromiseCatchFinally()
 
-setTimeout(() => {
-	moduleExports.testRAF()
-}, 2500)
+setTimeout(() => moduleExports.testRAF(), 3500)
 
 console.log('ok')
