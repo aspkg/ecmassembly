@@ -6,8 +6,9 @@ import {
 	clearTimeout,
 	setInterval,
 	clearInterval,
+	AnimationFrameCallback,
 } from '../node_modules/ecmassembly/assembly/index'
-import {logf32, logstr} from './log'
+import {logf32, logf64, logstr} from './log'
 
 // User should not new PromiseActions directly, but we have to export it so
 // they can create a variable that will reference it because there are no
@@ -76,7 +77,7 @@ export function testPromiseThen(): void {
 
 	p.then((n: i32) => {
 		if (n != 1000) throw new Error('It should have resolved with the correct value.')
-		logf32(f32(n))
+		logf32(n as f32)
 	})
 
 	p.catch((e: Error) => {
@@ -134,7 +135,7 @@ export function testPromiseThenFinally(): void {
 
 	p2.then((n: i32) => {
 		if (n != 3200) throw new Error('Resolved with incorrect value.')
-		logf32(f32(n))
+		logf32(n as f32)
 	})
 
 	p2.catch(e => {
@@ -181,31 +182,31 @@ export function testPromiseCatchFinally(): void {
 	logf32(8.8)
 }
 
-let actions5: PromiseActions<f32, Error> | null = null
+let actions5: PromiseActions<f64, Error> | null = null
 let count: f32 = 0.0
-let loop: (time: f32) => void = (t: f32) => {}
+let loop: AnimationFrameCallback = (t: f64) => {}
 
 export function testRAF(): void {
 	logf32(9.0)
 
-	const p = new Promise<f32, Error>(_actions => {
+	const p = new Promise<f64, Error>(_actions => {
 		actions5 = _actions
 
 		logf32(10.0)
 
-		requestAnimationFrame((time: f32) => {
+		requestAnimationFrame(time => {
 			actions5!.resolve(time)
 		})
 	})
 
-	p.then((n: f32) => {
+	p.then((n: f64) => {
 		logf32(4000)
-		logf32(n)
+		logf64(n)
 	})
 
-	loop = (time: f32): void => {
+	loop = (time: f64): void => {
 		logf32(count)
-		logf32(time)
+		logf64(time)
 		if (count++ < 100.0) requestAnimationFrame(loop)
 	}
 
