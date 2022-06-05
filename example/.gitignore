@@ -1,2 +1,2 @@
 build/
-*lock.*
+package-lock.json

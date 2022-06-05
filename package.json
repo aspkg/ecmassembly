@@ -22,11 +22,8 @@
 		"release:minor": "npm version minor -m 'v%s' && npm publish && git push --follow-tags",
 		"release:major": "npm version major -m 'v%s' && npm publish && git push --follow-tags"
 	},
-	"dependencies": {
-		"@assemblyscript/loader": "^0.18.11"
-	},
 	"devDependencies": {
-		"assemblyscript": "^0.18.11",
+		"assemblyscript": "^0.20.0",
 		"prettier": "^2.2.1"
 	},
 	"keywords": [
