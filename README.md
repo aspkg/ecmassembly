@@ -85,6 +85,12 @@ export function runMyApp() {
 }
 ```
 
+Finally, make sure when you compile your AS code you pass `--exportTable --exportRuntime` to the `asc` CLI. For example:
+
+```sh
+asc assembly/index.ts --target release --exportTable --exportRuntime
+```
+
 # APIs so far
 
 - `requestAnimationFrame`/`cancelAnimationFrame`
