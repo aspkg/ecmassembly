@@ -1,13 +1,4 @@
-import {
-	Promise,
-	PromiseActions,
-	setTimeout,
-	requestAnimationFrame,
-	clearTimeout,
-	setInterval,
-	clearInterval,
-	AnimationFrameCallback,
-} from '../node_modules/ecmassembly/assembly/index'
+import {PromiseActions, AnimationFrameCallback} from '../node_modules/ecmassembly/assembly/index'
 import {logf32, logf64, logstr} from './log'
 
 // User should not new PromiseActions directly, but we have to export it so
@@ -59,19 +50,29 @@ export function testSetInterval(): void {
 export function testPromiseThen(): void {
 	logf32(2.0)
 
-	const p = new Promise<i32, Error>(_actions => {
-		actions = _actions
+	const p = new Promise<i32>(actionsOrResolve => {
+		// @ts-expect-error for Wasm only
+		actions = actionsOrResolve
 
 		logf32(3.0)
 
 		setTimeout(() => {
-			// We will not need any null assertion when closures allows us to
-			// remove PromiseActions and therefore the user relies on the
-			// resolve/reject functions that will be passed into here, but for
-			// now they rely on actions object being passed in, and there's no
-			// way to reference it inside the setTimeout callback except for
-			// storing it on a global variable due to lacking closures.
-			actions!.resolve(1000)
+			if (ASC_TARGET == 0) {
+				// JS
+				actionsOrResolve(1000)
+			} else {
+				// Wasm
+				// TODO once we have closures, remove this checking, as we'll
+				// have plain resolve/reject functions.
+
+				// We will not need any null assertion when closures allows us to
+				// remove PromiseActions and therefore the user relies on the
+				// resolve/reject functions that will be passed into here, but for
+				// now they rely on actions object being passed in, and there's no
+				// way to reference it inside the setTimeout callback except for
+				// storing it on a global variable due to lacking closures.
+				actions!.resolve(1000)
+			}
 		}, 2000)
 	})
 
@@ -92,15 +93,18 @@ let actions2: PromiseActions<i32, Error> | null = null
 export function testPromiseCatch(): void {
 	logf32(5.0)
 
-	const p2 = new Promise<i32, Error>(_actions => {
-		actions2 = _actions
+	const p2 = new Promise<i32>((actionsOrResolve, reject) => {
+		// @ts-expect-error for Wasm only
+		actions2 = actionsOrResolve
 
 		logf32(6.0)
 
 		setTimeout(() => {
 			logf32(7.0)
+			const e = new Error('rejected1')
 
-			actions2!.reject(new Error('rejected1'))
+			if (ASC_TARGET == 0) reject(e)
+			else actions2!.reject(e)
 		}, 2000)
 	})
 
@@ -121,15 +125,17 @@ let actions3: PromiseActions<i32, Error> | null = null
 export function testPromiseThenFinally(): void {
 	logf32(8.1)
 
-	const p2 = new Promise<i32, Error>(_actions => {
-		actions3 = _actions
+	const p2 = new Promise<i32>((actionsOrResolve, reject) => {
+		// @ts-expect-error for Wasm only
+		actions3 = actionsOrResolve
 
 		logf32(8.2)
 
 		setTimeout(() => {
 			logf32(8.3)
 
-			actions3!.resolve(3200)
+			if (ASC_TARGET == 0) actionsOrResolve(3200)
+			else actions3!.resolve(3200)
 		}, 2000)
 	})
 
@@ -154,15 +160,18 @@ let actions4: PromiseActions<i32, Error> | null = null
 export function testPromiseCatchFinally(): void {
 	logf32(8.5)
 
-	const p2 = new Promise<i32, Error>(_actions => {
-		actions4 = _actions
+	const p2 = new Promise<i32>((actionsOrResolve, reject) => {
+		// @ts-expect-error for Wasm only
+		actions4 = actionsOrResolve
 
 		logf32(8.6)
 
 		setTimeout(() => {
 			logf32(8.7)
+			const e = new Error('rejected2')
 
-			actions4!.reject(new Error('rejected2'))
+			if (ASC_TARGET == 0) reject(e)
+			else actions4!.reject(e)
 		}, 2000)
 	})
 
@@ -189,13 +198,17 @@ let loop: AnimationFrameCallback = (t: f64) => {}
 export function testRAF(): void {
 	logf32(9.0)
 
-	const p = new Promise<f64, Error>(_actions => {
-		actions5 = _actions
+	const p = new Promise<f64>((actionsOrResolve, reject) => {
+		// @ts-expect-error for Wasm only
+		actions5 = actionsOrResolve
 
 		logf32(10.0)
 
 		requestAnimationFrame(time => {
 			actions5!.resolve(time)
+
+			if (ASC_TARGET == 0) actionsOrResolve(time)
+			else actions5!.resolve(time)
 		})
 	})
 

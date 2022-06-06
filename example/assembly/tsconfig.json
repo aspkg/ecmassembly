@@ -1,6 +1,7 @@
 {
-  "extends": "../../../../.npm-packages/lib/node_modules/assemblyscript/std/assembly.json",
-  "include": [
-    "./**/*.ts"
-  ]
+	"extends": "assemblyscript/std/portable.json",
+	"compilerOptions": {
+		"lib": ["dom", "esnext"]
+	},
+	"include": ["./**/*.ts"]
 }

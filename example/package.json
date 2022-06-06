@@ -4,8 +4,8 @@
 		"start": "npm i && npm run dev",
 		"build": "npm run asbuild",
 		"dev": "npm run asbuild:untouched && npm test && echo TODO: watch mode",
-		"asbuild:untouched": "asc assembly/index.ts --target debug --exportTable --exportRuntime",
-		"asbuild:optimized": "asc assembly/index.ts --target release --exportTable --exportRuntime",
+		"asbuild:untouched": "asc --target debug --exportTable --exportRuntime",
+		"asbuild:optimized": "asc --target release --exportTable --exportRuntime",
 		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
 		"test": "node tests"
 	},

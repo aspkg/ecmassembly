@@ -3,9 +3,10 @@ import {ptr} from './utils'
 
 // TODO convert to callback form once closures are out.
 // type Executor<T> = (resolve: (result: T) => void, reject: (error: Error | null) => void) => void
-type Executor<T, E extends Error> = (resRej: PromiseActions<T, E>) => void
+type Executor<T, E extends Error> = (resRej: PromiseActions<T, E>, rejectJSOnly: () => void) => void
 
 // We shouldn't have to export this (this class should not even exist) once AS supports closures.
+@global
 export class PromiseActions<T, E extends Error> {
 	/*friend*/ constructor(private promise: Promise<T, E>) {}
 
@@ -22,14 +23,14 @@ export class PromiseActions<T, E extends Error> {
 		this.promise.__runThen()
 	}
 
-	reject(error: E): void {
+	reject(reason: E): void {
 		// @ts-ignore, internal access
 		if (this.promise.__isSettled) return
 		// @ts-ignore, internal access
 		this.promise.__isSettled = true
 
 		// @ts-ignore, internal access
-		this.promise.__error.push(error)
+		this.promise.__error.push(reason)
 
 		// @ts-ignore, internal access
 		this.promise.__runCatch()
@@ -45,7 +46,8 @@ export class PromiseActions<T, E extends Error> {
  * closures in AS lands, we'll change this to be two callbacks instead of an
  * object, as per the Promise spec.
  */
-export class Promise<T, E extends Error> {
+@global
+export class Promise<T, E extends Error = Error> {
 	private __ptr: usize = ptr(this)
 	private __isSettled: boolean = false
 
@@ -63,7 +65,7 @@ export class Promise<T, E extends Error> {
 	private __finallyCallback: Array<() => void> = []
 
 	constructor(private executor: Executor<T, E>) {
-		this.executor(this.__actions)
+		this.executor(this.__actions, () => {})
 	}
 
 	/**
