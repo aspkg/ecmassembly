@@ -1,5 +1,9 @@
 {
-	"entries": ["assembly/index.ts"],
+	"entries": [
+		"./node_modules/ecmassembly/assembly/PromiseActions",
+		"./node_modules/ecmassembly/assembly/globals.ts",
+		"./assembly/index-wasm.ts"
+	],
 	"targets": {
 		"debug": {
 			"binaryFile": "build/untouched.wasm",

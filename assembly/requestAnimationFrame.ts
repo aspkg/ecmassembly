@@ -1,12 +1,12 @@
+import { FrameRequestCallback } from "./FrameRequestCallback"
+
 declare function _requestAnimationFrame(fn: usize): i32
 
 export {_requestAnimationFrame}
 
-export type AnimationFrameCallback = (time: f64) => void
-
 // @ts-expect-error func decos
 @global
-export function requestAnimationFrame(fn: AnimationFrameCallback): i32 {
+export function requestAnimationFrame(fn: FrameRequestCallback): i32 {
 	return _requestAnimationFrame(fn.index)
 }
 

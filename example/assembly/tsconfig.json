@@ -1,7 +1,10 @@
 {
 	"extends": "assemblyscript/std/portable.json",
 	"compilerOptions": {
-		"lib": ["dom", "esnext"]
+		"lib": ["dom", "esnext"],
+		"module": "esnext",
+		"moduleResolution": "node",
+		"target": "es2020"
 	},
-	"include": ["./**/*.ts"]
+	"include": ["./**/*.ts", "../../assembly/log.d.ts", "log.js"]
 }

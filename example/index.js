@@ -12,8 +12,7 @@ const es = new ECMAssembly()
 const imports = {
 	...es.wasmImports,
 	console: {
-		log: n => console.log(n),
-		logstr: s => console.log(wasmModule.exports.__getString(s)),
+		log: s => console.log(wasmModule.exports.__getString(s)),
 	},
 	env: {
 		abort(message, fileName, line, column) {

@@ -1,41 +1,7 @@
 import {defer, deferWithArg, _defer} from './defer'
+import {PromiseActions} from './PromiseActions'
+import {PromiseExecutor} from './PromiseExecutor'
 import {ptr} from './utils'
-
-// TODO convert to callback form once closures are out.
-// type Executor<T> = (resolve: (result: T) => void, reject: (error: Error | null) => void) => void
-type Executor<T, E extends Error> = (resRej: PromiseActions<T, E>, rejectJSOnly: () => void) => void
-
-// We shouldn't have to export this (this class should not even exist) once AS supports closures.
-@global
-export class PromiseActions<T, E extends Error> {
-	/*friend*/ constructor(private promise: Promise<T, E>) {}
-
-	resolve(result: T): void {
-		// @ts-ignore, internal access
-		if (this.promise.__isSettled) return
-		// @ts-ignore, internal access
-		this.promise.__isSettled = true
-
-		// @ts-ignore, internal access
-		this.promise.__result.push(result)
-
-		// @ts-ignore, internal access
-		this.promise.__runThen()
-	}
-
-	reject(reason: E): void {
-		// @ts-ignore, internal access
-		if (this.promise.__isSettled) return
-		// @ts-ignore, internal access
-		this.promise.__isSettled = true
-
-		// @ts-ignore, internal access
-		this.promise.__error.push(reason)
-
-		// @ts-ignore, internal access
-		this.promise.__runCatch()
-	}
-}
 
 /**
  * Creates a new Promise.
@@ -64,7 +30,7 @@ export class Promise<T, E extends Error = Error> {
 	private __catchCallback: Array<(err: E) => void> = []
 	private __finallyCallback: Array<() => void> = []
 
-	constructor(private executor: Executor<T, E>) {
+	constructor(private executor: PromiseExecutor<T, E>) {
 		this.executor(this.__actions, () => {})
 	}
 
@@ -73,12 +39,15 @@ export class Promise<T, E extends Error = Error> {
 	 * @param onresolved The callback to execute when the Promise is resolved.
 	 * @returns A Promise for the completion of which ever callback is executed.
 	 */
-	then(onresolved: (v: T) => void): void {
+	then(onresolved: (v: T) => void): Promise<T, E> {
 		if (this.__thenCallback.length) throw new Error('Promise chaining or multiple then/catch calls not yet supported.')
 
 		this.__thenCallback.push(onresolved)
 
 		if (this.__result.length) this.__runThen()
+
+		// TODO Promise.then should return a new Promise, not `this`
+		return this
 	}
 
 	private __runThen(): void {
@@ -114,12 +83,15 @@ export class Promise<T, E extends Error = Error> {
 	 * @param onrejected The callback to execute when the Promise is rejected.
 	 * @returns A Promise for the completion of the callback.
 	 */
-	catch(onrejected: (err: E) => void): void {
+	catch(onrejected: (err: E) => void): Promise<T, E> {
 		if (this.__catchCallback.length) throw new Error('Promise chaining or multiple then/catch calls not yet supported.')
 
 		this.__catchCallback.push(onrejected)
 
 		if (this.__error.length) this.__runCatch()
+
+		// TODO Promise.catch should return a new Promise, not `this`
+		return this
 	}
 
 	private __runCatch(): void {
@@ -160,6 +132,7 @@ export class Promise<T, E extends Error = Error> {
 
 		this.__finallyCallback.push(onfinally)
 
+		// TODO Promise.finally should return a new Promise, not `this`
 		return this
 	}
 

@@ -17,8 +17,8 @@
 		"asbuild:untouched": "asc --target debug --exportTable --exportRuntime",
 		"asbuild:optimized": "asc --target release --exportTable --exportRuntime",
 		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
-		"clean": "rimraf build && rimraf example/build",
-		"test": "npm run clean && npm run asbuild && cd example && npm start",
+		"clean": "rimraf build",
+		"test": "npm run clean && npm run asbuild && cd example && npm test",
 		"release:patch": "npm version patch -m 'v%s' && npm publish && git push --follow-tags",
 		"release:minor": "npm version minor -m 'v%s' && npm publish && git push --follow-tags",
 		"release:major": "npm version major -m 'v%s' && npm publish && git push --follow-tags"
