@@ -5,7 +5,7 @@ import './log.js'
 // they can create a variable that will reference it because there are no
 // closures. Once closures land, this class will not be exported, and the end
 // user will use callbacks passed into new Promise executors.
-let actions: PromiseActions<i32, Error> | null = null
+let actions: PromiseActions<i32> | null = null
 
 let timeout: i32 = 0
 let interval: i32 = 0
@@ -86,7 +86,7 @@ export function testPromiseThen(): void {
 	log((4.0).toString())
 }
 
-let actions2: PromiseActions<i32, Error> | null = null
+let actions2: PromiseActions<i32> | null = null
 
 export function testPromiseCatch(): void {
 	log((5.0).toString())
@@ -119,7 +119,7 @@ export function testPromiseCatch(): void {
 	log((8.0).toString())
 }
 
-let actions3: PromiseActions<i32, Error> | null = null
+let actions3: PromiseActions<i32> | null = null
 
 export function testPromiseThenFinally(): void {
 	log((8.1).toString())
@@ -152,7 +152,7 @@ export function testPromiseThenFinally(): void {
 	log((8.4).toString())
 }
 
-let actions4: PromiseActions<i32, Error> | null = null
+let actions4: PromiseActions<i32> | null = null
 
 export function testPromiseCatchFinally(): void {
 	log((8.5).toString())
@@ -188,7 +188,7 @@ export function testPromiseCatchFinally(): void {
 	log((8.8).toString())
 }
 
-let actions5: PromiseActions<f64, Error> | null = null
+let actions5: PromiseActions<f64> | null = null
 let count: f32 = 0.0
 let loop: FrameRequestCallback = (t: number) => {}
 
