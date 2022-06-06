@@ -4,7 +4,7 @@ import ASLoader from '@assemblyscript/loader'
 import {ECMAssembly} from 'ecmassembly/index.js'
 import raf from 'raf'
 
-// Use must polyfill requestAnimationFrame in Node (or else the ecmassembly lib throws a helpful error that user needs to do so).
+// You must polyfill requestAnimationFrame in Node (or else the ecmassembly lib throws a helpful error that user needs to do so).
 raf.polyfill(globalThis)
 
 const es = new ECMAssembly()
