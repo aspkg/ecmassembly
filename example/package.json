@@ -7,7 +7,7 @@
 		"asbuild:untouched": "asc --target debug --exportTable --exportRuntime",
 		"asbuild:optimized": "asc --target release --exportTable --exportRuntime",
 		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
-		"build:js": "tsc -p assembly/tsconfig.json --outDir build-js",
+		"build:js": "tsc -p assembly/tsconfig.json",
 		"clean:wasm": "rimraf build",
 		"clean:js": "rimraf build-js",
 		"test:wasm": "npm run clean:wasm && npm run asbuild && node tests-wasm",

@@ -1,4 +1,4 @@
-// First import JS helpers
+// First import JS type helpers
 import 'assemblyscript/std/portable/index'
 import type {} from 'ecmassembly/assembly/PromiseActions-js'
 
