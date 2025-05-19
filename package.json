@@ -1,21 +1,32 @@
 {
 	"name": "ecmassembly",
-	"version": "0.1.1",
+	"version": "0.3.0-beta.0",
 	"type": "module",
+	"homepage": "https://github.com/aspkg/ecmassembly",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:aspkg/ecmassembly.git"
+	},
+	"bugs": {
+		"url": "https://github.com/aspkg/ecmassembly/issues"
+	},
 	"scripts": {
 		"start": "npm run dev",
 		"build": "npm run asbuild",
 		"dev": "npm run asbuild:untouched && npm test && echo TODO: watch mode",
-		"asbuild:untouched": "asc assembly/index.ts --target debug --exportTable --exportRuntime",
-		"asbuild:optimized": "asc assembly/index.ts --target release --exportTable --exportRuntime",
-		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
-	},
-	"dependencies": {
-		"@assemblyscript/loader": "^0.18.11"
+		"asbuild:untouched": "asc --target debug --exportTable --exportRuntime",
+		"asbuild:optimized": "asc --target release --exportTable --exportRuntime",
+		"asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+		"clean": "rimraf build",
+		"test": "npm run clean && npm run asbuild && cd example && npm test",
+		"release:patch": "npm version patch -m 'v%s' && npm publish && git push --follow-tags",
+		"release:minor": "npm version minor -m 'v%s' && npm publish && git push --follow-tags",
+		"release:major": "npm version major -m 'v%s' && npm publish && git push --follow-tags"
 	},
 	"devDependencies": {
-		"assemblyscript": "^0.18.11",
-		"prettier": "^2.2.1"
+		"assemblyscript": "^0.20.0",
+		"prettier": "^2.2.1",
+		"rimraf": "^3.0.2"
 	},
 	"keywords": [
 		"assemblyscript",

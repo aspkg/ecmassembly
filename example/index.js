@@ -4,17 +4,15 @@ import ASLoader from '@assemblyscript/loader'
 import {ECMAssembly} from 'ecmassembly/index.js'
 import raf from 'raf'
 
-// Use must polyfill requestAnimationFrame in Node (or else the ecmassembly lib throws a helpful error that user needs to do so).
-global.requestAnimationFrame = raf
+// You must polyfill requestAnimationFrame in Node (or else the ecmassembly lib throws a helpful error that user needs to do so).
+raf.polyfill(globalThis)
 
 const es = new ECMAssembly()
 
 const imports = {
 	...es.wasmImports,
-	logf32: {
-		logf32(n) {
-			console.log(n)
-		},
+	console: {
+		log: s => console.log(wasmModule.exports.__getString(s)),
 	},
 	env: {
 		abort(message, fileName, line, column) {
@@ -38,6 +36,8 @@ const wasmModule = ASLoader.instantiateSync(
 	imports,
 )
 
+// Before doing anything, give the exports to ECMAssembly
 es.wasmExports = wasmModule.exports
 
+// Now run anything (in this case, the example's tests/index.js file will call the exported functions).
 export default wasmModule.exports

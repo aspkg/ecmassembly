@@ -17,6 +17,8 @@ export class ECMAssembly {
 
 	_exports = null
 
+	__deferWithArg_pinnedRefCount = new Map()
+
 	wasmImports = {
 		console: {
 			_log: (data) => {
@@ -25,19 +27,29 @@ export class ECMAssembly {
 		},
 		requestAnimationFrame: {
 			_requestAnimationFrame: fnIndex => {
-				if (typeof requestAnimationFrame === 'undefined')
-					throw new Error('No requestAnimationFrame function detected. Install a polyfill in your environment first.')
-
-				requestAnimationFrame(time => {
+				return requestAnimationFrame(time => {
 					this.getFn(fnIndex)(time)
 				})
 			},
+
+			// _cancelAnimationFrame: id => {
+			// 	cancelAnimationFrame(id)
+			// },
+			cancelAnimationFrame,
 		},
 
 		setTimeout: {
 			_setTimeout: (fnIndex, ms) => {
-				setTimeout(this.getFn(fnIndex), ms)
+				return setTimeout(this.getFn(fnIndex), ms)
 			},
+			clearTimeout,
+		},
+
+		setInterval: {
+			_setInterval: (fnIndex, ms) => {
+				return setInterval(this.getFn(fnIndex), ms)
+			},
+			clearInterval,
 		},
 
 		defer: {
@@ -45,17 +57,29 @@ export class ECMAssembly {
 				Promise.resolve().then(this.getFn(callbackIndex))
 			},
 			_deferWithArg: (callbackIndex, argPtr) => {
+				let refCount = this.__deferWithArg_pinnedRefCount.get(argPtr)
+				refCount ?? this.__deferWithArg_pinnedRefCount.set(argPtr, (refCount = 0))
+
 				// Prevent the thing pointed to by argPtr from being collectd, because the callback needs it later.
-				this.__pin(argPtr)
+				if (refCount++ === 0) this.__pin(argPtr)
+				this.__deferWithArg_pinnedRefCount.set(argPtr, refCount)
 
 				Promise.resolve().then(() => {
 					// At this point, is the callback collected? Did we need to
-					// __pin the callback too, and it currently works by
+					// __pin the callback too? Does it currently works by
 					// accident?
 
 					this.getFn(callbackIndex)(argPtr)
 
-					this.__unpin(argPtr)
+					let refCount = this.__deferWithArg_pinnedRefCount.get(argPtr)
+					if (refCount == null) throw new Error('We should always have a ref count at this point!')
+
+					if (refCount-- === 0) {
+						this.__unpin(argPtr)
+						this.__deferWithArg_pinnedRefCount.delete(argPtr)
+					} else {
+						this.__deferWithArg_pinnedRefCount.set(argPtr, refCount)
+					}
 				})
 			},
 		},

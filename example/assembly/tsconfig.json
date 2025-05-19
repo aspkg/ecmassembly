@@ -1,6 +1,11 @@
 {
-  "extends": "../../../../.npm-packages/lib/node_modules/assemblyscript/std/assembly.json",
-  "include": [
-    "./**/*.ts"
-  ]
+	"extends": "assemblyscript/std/portable.json",
+	"compilerOptions": {
+		"outDir": "../build-js",
+		"lib": ["dom", "esnext"],
+		"module": "esnext",
+		"moduleResolution": "node",
+		"target": "es2020"
+	},
+	"include": ["./**/*.ts", "log.d.ts", "log.js"]
 }

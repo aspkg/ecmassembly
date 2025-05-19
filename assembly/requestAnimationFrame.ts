@@ -1,10 +1,15 @@
-import {fnPointerToIndex, ptr} from './utils'
+import { FrameRequestCallback } from "./FrameRequestCallback"
 
-declare function _requestAnimationFrame(fn: usize): void
+declare function _requestAnimationFrame(fn: usize): i32
 
 export {_requestAnimationFrame}
 
-export function requestAnimationFrame<T>(fn: T): void {
-	if (!isFunction<T>(fn)) throw new Error('Must pass a function of type `() => void`.')
-	_requestAnimationFrame(fnPointerToIndex(ptr(fn)))
+// @ts-expect-error func decos
+@global
+export function requestAnimationFrame(fn: FrameRequestCallback): i32 {
+	return _requestAnimationFrame(fn.index)
 }
+
+// @ts-expect-error func decos
+@global
+export declare function cancelAnimationFrame(id: i32): void
