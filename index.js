@@ -20,6 +20,11 @@ export class ECMAssembly {
 	__deferWithArg_pinnedRefCount = new Map()
 
 	wasmImports = {
+		console: {
+			_log: (data) => {
+				console.log(this._exports.__getString(data))
+			}
+		},
 		requestAnimationFrame: {
 			_requestAnimationFrame: fnIndex => {
 				return requestAnimationFrame(time => {

@@ -1,6 +1,13 @@
 # ECMAssembly
 
-Spec'd and/or common JavaScript APIs brought to AssemblyScript.
+(Some) JavaScript APIs brought to AssemblyScript.
+
+So far:
+
+- `requestAnimationFrame`
+- `setTimeout`
+- `Promise` (rudimentary initial implementation, still lacking things like promise chaining and static methods, etc)
+- `Console`
 
 > The name is a play on words:
 > `ECMAScript -> AssemblyScript -> ECMAssembly`
@@ -83,7 +90,8 @@ export function runMyApp() {
 	})
 
 	promise.then(result => {
-		// this runs one second later, and `result` will be `true` here
+		console.log(result)
+		// -- Console accepts amost anything. Numbers, Strings, Functions, Arrays.
 	})
 }
 ```
